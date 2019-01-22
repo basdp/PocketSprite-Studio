@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .scroll-decoration {
+            display: none;
+        }
+    </style>
+    <script>
+        const fs = parent.require("fs");
+        const Mousetrap = parent.require('mousetrap');
+    </script>
+</head>
+
+<body>
+    <div id="container" style="width:100vw;height:100vh;border:none"></div>
+
+    <script src="../node_modules/monaco-editor/min/vs/loader.js"></script>
+    <script>
+        function readFile(editor, filename) {
+            fs.readFile(filename, "utf8", function(err, data) {
+                editor.setValue(data.toString());
+            });
+        }
+
+        require.config({ paths: { 'vs': '../node_modules/monaco-editor/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            monaco.editor.defineTheme('myCoolTheme', {
+                base: 'vs-dark',
+                inherit: true,
+                "colors": {
+                    "editor.background": "#1D1F26",
+                    "editor.lineHighlightBorder": "#23262E",
+                    "editor.lineHighlightBackground": "#23262E"
+                },
+                rules: [
+                    { background: '1D1F26' }
+                    // { token: 'custom-info', foreground: '808080' },
+                    // { token: 'custom-error', foreground: 'ff0000', fontStyle: 'bold' },
+                    // { token: 'custom-notice', foreground: 'FFA500' },
+                    // { token: 'custom-date', foreground: '008800' },
+                ]
+            });
+
+            var editor = monaco.editor.create(document.getElementById('container'), {
+                theme: 'myCoolTheme',
+                language: 'c'
+            });
+
+            window.editorFilename = decodeURI(window.location.hash.substr(1));
+            window.editor = editor;
+            readFile(editor, window.editorFilename);
+
+            window.onresize = function () {
+                editor.layout();
+            };
+
+            editor.addAction({
+                id: 'my-save-id',
+                label: 'Save file',
+
+                keybindings: [
+                    monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S,
+                ],
+                precondition: null,
+                keybindingContext: null,
+                contextMenuGroupId: 'navigation',
+                contextMenuOrder: 1.5,
+                // Method that will be executed when the action is triggered.
+                // @param editor The editor instance is passed in as a convinience
+                run: function (ed) {
+                    parent.saveCurrentEditor();
+                    return null;
+                }
+            });
+        });
+
+        function save() {
+            fs.writeFile(window.editorFilename, window.editor.getValue(), "utf8", function() {
+                console.log(window.editorFilename + " saved");
+            });
+        }
+    </script>
+</body>
+
+</html>

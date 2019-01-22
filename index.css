@@ -1,5 +1,203 @@
-html, body {
+body {
     padding: 0;
     margin: 0;
-    background: black;
+    background: #1D1F26;
+    font-family: Roboto;
+    color: #CCC;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+*::-webkit-scrollbar-track
+{
+	background: transparent;
+}
+
+*::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb
+{
+	background-color: #14151A;
+}
+
+div {
+    cursor: default;
+    user-select: none;
+}
+
+.titlebar {
+    height: 32px;
+    background: #151415;
+    -webkit-app-region: drag;
+    position: relative;
+}
+
+.titlebar .title {
+    position: absolute;
+    top: 0;
+    left: 16px;
+    line-height: 32px;
+    font-size: 13px;
+    width: calc(100vw - 42px * 3);
+}
+
+.titlebar .windowbuttons {
+    position: absolute;
+    top: 0; right: 0;
+    width: 126px;
+    height: 32px;
+    -webkit-app-region: no-drag;
+}
+
+.titlebar .windowbuttons .button {
+    display: block;
+    float: right;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    height: 32px;
+    width: 42px;
+    line-height: 36px;
+    text-align: center;
+}
+
+.titlebar .windowbuttons .button i {
+    font-size: 13px;
+}
+
+.titlebar .windowbuttons .button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.titlebar .windowbuttons .button.close-button:hover {
+    background: rgba(255, 0, 0, 0.3);
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 2;
+}
+
+.filelist {
+    flex: 0 0 260px;
+    position: relative;
+    overflow: hidden;
+    background: #222730;
+}
+
+.filelist .toolbar {
+    position: absolute;
+    top: 0;
+    right: 6px;
+}
+
+.filelist .title {
+    height: 32px;
+    line-height: 32px;
+    font-size: 11px;
+    padding: 0 16px;
+
+}
+
+.filelist ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: calc(100vh - 64px);
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.filelist ul li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+    line-height: 24px;
+    padding: 0 6px;
+}
+
+.filelist ul li i {
+    font-size: 16px;
+    position: relative;
+    top: -1px;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.filelist ul li:hover {
+    background: rgba(255, 255, 255, 0.03);
+
+}
+
+.filelist ul li.selected {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.toolbar {
+    padding-left: 6px;
+    height: 32px;
+    display: flex;
+    background: #222730;
+}
+
+.toolbar.right {
+    margin-left: 0;
+    position: absolute;
+    top: 0; right: 0;
+}
+
+.toolbar .button {
+    display: inline-block;
+    margin-right: 4px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    flex: 0 0 32px;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar .button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.toolbar .button:active {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.toolbar .button:active i {
+    position: relative;
+    top: 1px;
+}
+
+.toolbar .button i {
+    font-size: 22px;
+}
+
+.toolbar .separator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+}
+
+.editor {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
+    position: relative;
+}
+
+.editor iframe {
+    border: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 2;
 }

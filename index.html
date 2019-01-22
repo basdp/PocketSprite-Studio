@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
+    <link rel="stylesheet" href="node_modules/material-design-icons/iconfont/material-icons.css" />
+    <link rel="stylesheet" href="node_modules/typeface-roboto/index.css" />
     <link rel="stylesheet" href="index.css" />
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script>
@@ -14,7 +16,47 @@
 </head>
 
 <body>
+    <div class="titlebar">
+        <div class="title"><b>PocketSprite</b> Studio</div>
+        <div class="windowbuttons">
+            <div class="button close-button">
+                <i class="material-icons md-18">close</i>
+            </div>
+            <div class="button maximize-button">
+                <i class="material-icons">filter_none</i>
+            </div>
+            <div class="button minimize-button">
+                <i class="material-icons">remove</i>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="filelist">
+            <div class="title">PROJECT</div>
+            <div class="toolbar">
+                <div class="button new-file" title="New file..."><i class="material-icons">add</i></div>
+                <div class="button open-project" title="Open project..."><i class="material-icons">folder_open</i></div>
+                <div class="button new-project" title="New project..."><i class="material-icons">create_new_folder</i></div>
+            </div>
+            <ul id="files">
+                
+            </ul>
+        </div>
+        <div class="editor">
+            <div class="toolbar">
+                <div class="button save" title="Save file"><i class="material-icons">save</i></div>
+                <div class="separator"></div>
+                <div class="button run" title="Run in emulator"><i class="material-icons">play_arrow</i></div>
+                <div class="button export" title="Export to PocketSprite"><i class="material-icons">videogame_asset</i></div>
+            </div>
+            <div class="toolbar right">
+                <div class="button store" title="Open starting page"><i class="material-icons">store</i></div>
+                <div class="button settings" title="Settings..."><i class="material-icons">build</i></div>
+            </div>
+            <!-- <iframe src="editors/code.html"></iframe> -->
+        </div>
 
+    </div>
 
 
 </body>

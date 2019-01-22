@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Create file</title>
+    <link rel="stylesheet" href="node_modules/material-design-icons/iconfont/material-icons.css" />
+    <link rel="stylesheet" href="node_modules/typeface-roboto/index.css" />
+    <link rel="stylesheet" href="index.css" />
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+        //window.jQuery = window.$ = require('jquery');
+
+        const ipc = require('electron').ipcRenderer;
+
+        ipc.on('close-createfile', (event, message) => window.close());
+
+        function ok() {
+            filename = document.getElementById('filename').value;
+            if (filename.length > 0) {
+                ext = document.forms.frm.ext.value;
+                filename = forceExt(filename, ext);
+                ipc.send('createFile', filename);
+            }
+            return false;
+        }
+
+        function cancel() {
+            window.close();
+        }
+
+        function filenamechanged(self) {
+            filename = document.getElementById('filename').value;
+            if (filename.length > 0) {
+                document.getElementById('okbutton').disabled = false;
+            } else {
+                document.getElementById('okbutton').disabled = true;
+            }
+        }
+
+        function forceExt(filename, ext) {
+            if (filename.endsWith("." + ext)) return filename;
+
+            if (filename.lastIndexOf('.') == -1) filename = filename + ".";
+            filename = filename.substr(0, filename.lastIndexOf('.')) + "." + ext;
+            return filename;
+        }
+
+        function extchanged(self) {
+            filename = document.getElementById('filename').value.toLowerCase();
+            ext = self.value;
+            document.getElementById("filename").value = forceExt(filename, ext);
+        }
+
+    </script>
+    <style>
+        form {
+            font-size: 12px;
+            margin: 20px;
+        }
+
+        .fn {
+            margin-top: 20px;
+        }
+
+        .type , .fn label {
+            width: 110px;
+            display: block;
+            float: left;
+            position: relative;
+            top: 3px;
+        }
+
+        input[type="radio"] {
+            margin-left: 0;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #CCC;
+        }
+
+        .button:disabled {
+            color: black;
+        }
+
+        .buttons {
+            margin-top: 50px;
+            text-align: right;
+        }
+
+        #filename {
+            width: 230px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="titlebar">
+        <div class="title">Please select a filetype and enter a filename.</div>
+    </div>
+
+    <div>
+        <form onsubmit="return ok()" method="get" id="frm" name="frm">
+            <div class="type">File type:</div>
+            <div class="radio"><input type="radio" id="c" name="ext" value="c"  oninput="extchanged(this)" checked> <label for="c">C source file (.c)</label></div>
+            <div class="type">&nbsp;</div><div class="radio"><input type="radio" id="h" name="ext" value="h" oninput="extchanged(this)"> <label for="h">C header file (.h)</label></div>
+            <div class="type">&nbsp;</div><div class="radio"><input type="radio" id="spr" name="ext" value="spr" oninput="extchanged(this)"> <label for="spr">Sprite sheet (.spr)</label></div>
+            <div class="type">&nbsp;</div><div class="radio"><input type="radio" id="map" name="ext" value="map" oninput="extchanged(this)"> <label for="map">Sprite map (.map)</label></div>
+            <div class="type">&nbsp;</div><div class="radio"><input type="radio" id="sfx" name="ext" value="sfx" oninput="extchanged(this)"> <label for="sfx">Sound effect (.sfx)</label></div>
+            <div class="type">&nbsp;</div><div class="radio"><input type="radio" id="mus" name="ext" value="mus" oninput="extchanged(this)"> <label for="mus">Music track (.mus)</label></div>
+
+            <div class="fn"><label for="filename">Filename:</label> <input type="text" id="filename" name="filename" value="file.c" oninput="filenamechanged(this)"></div>
+        
+            <div class="buttons">
+                <button class="button" type="button" onclick="cancel()">Cancel</button>
+                <button class="button" type="submit" id="okbutton">OK</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>

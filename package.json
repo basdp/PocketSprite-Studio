@@ -17,6 +17,11 @@
     "electron": "^4.0.1"
   },
   "dependencies": {
-    "jquery": "^3.3.1"
+    "electron-modal": "^1.0.0",
+    "jquery": "^3.3.1",
+    "material-design-icons": "^3.0.1",
+    "monaco-editor": "^0.15.6",
+    "mousetrap": "^1.6.2",
+    "typeface-roboto": "0.0.54"
   }
 }
