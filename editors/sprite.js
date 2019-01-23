@@ -2,6 +2,7 @@ var currentSprite_x = 0;
 var currentSprite_y = 0;
 
 var canvasSize = 8;
+var canvasZoom = 256;
 
 var image, imagectx, canvas, canvasctx;
 
@@ -14,6 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
     imagectx['webkitImageSmoothingEnabled'] = false
     canvasctx['webkitImageSmoothingEnabled'] = false
 
+    canvasSize = canvas.width;
+    canvasZoom = parseInt(window.getComputedStyle(canvas, null).getPropertyValue("width"));
+    $("#canvassize").text(canvasSize);
+
     //imagectx.filter = 'url(#remove-alpha)';
     //canvasctx.filter = 'url(#remove-alpha)';
     //imagectx.moveTo(0, 0);
@@ -21,7 +26,19 @@ document.addEventListener('DOMContentLoaded', function() {
     //imagectx.stroke();
     //imagectx.filter = 'none';
 
-    drawCanvas();
+    fs.readFile(window.editorFilename, function (err, data) {
+        var img = new Image;
+        img.onload = function () {
+            imagectx.drawImage(img, 0, 0); // Or at whatever offset you like
+            drawCanvas();
+        };
+        img.src = "data:text/plain;base64," + data.toString('base64');
+    });
+
+    Mousetrap.bind(['command+s', 'ctrl+s'], function () {
+        save();
+        return false;
+    });
 
     $(".colors .color").on("click", function () {
         $(".colors .color").removeClass("selected");
@@ -42,10 +59,62 @@ document.addEventListener('DOMContentLoaded', function() {
         tools[currentTool][name](x, y, color);
     }
 
+    $("#increasecanvassize").on("click", function (e) {
+        if (setCanvasSize(canvasSize * 2))
+            setCanvasZoom(canvasZoom * 2);
+    });
+
+    $("#decreasecanvassize").on("click", function (e) {
+        if (setCanvasSize(canvasSize / 2))
+            setCanvasZoom(canvasZoom / 2);
+    });
+
     $(canvas).on("mousedown", function (e) { canvasEvent("mousedown", e) });
     $(canvas).on("mousemove", function (e) { canvasEvent("mousemove", e) });
     $(canvas).on("mouseup", function (e) { canvasEvent("mouseup", e) });
+
+    $(".canvas").on("mousewheel", function (e) { 
+        if (e.originalEvent.wheelDelta / 120 > 0) {
+            setCanvasZoom(canvasZoom * 2);
+        } else {
+            setCanvasZoom(canvasZoom / 2);
+        }
+        
+     });
 });
+
+function setCanvasZoom(zoom) {
+    if (zoom > 512) return false;
+    if (zoom < canvasSize) return false;
+
+    var availableWidth = $(".canvas").width();
+    if (zoom > availableWidth) {
+        $(".canvas").css("display", "block");
+    } else {
+        $(".canvas").css("display", "flex");
+    }
+    canvasZoom = zoom;
+    canvas.style.width = canvas.style.height = canvasZoom + "px";
+    canvas.style.backgroundSize = (canvasZoom / canvasSize) + "px " + (canvasZoom / canvasSize) + "px ";
+    drawCanvas();
+    return true;
+}
+
+function setCanvasSize(size) {
+    if (size > 128) return false;
+    if (size < 8) return false;
+    canvasSize = size;
+    canvas.width = size;
+    canvas.height = size;
+    document.getElementById("sectionpickerindicator").style.width = canvasSize + "px";
+    document.getElementById("sectionpickerindicator").style.height = canvasSize + "px";
+    document.getElementById("sectionpicker").style.width = canvasSize + "px";
+    document.getElementById("sectionpicker").style.height = canvasSize + "px";
+    drawCanvas();
+    $("#canvassize").text(size);
+    return true;
+}
+
 function drawCanvas() {
     canvasctx.clearRect(0, 0, canvasSize, canvasSize);
     canvasctx.drawImage(image, currentSprite_x, currentSprite_y, canvasSize, canvasSize, 0, 0, canvasSize, canvasSize);
@@ -56,9 +125,14 @@ function spritescontainer_mousemove(e) {
     var x = e.pageX - rect.x;
     var y = e.pageY - rect.y;
 
+    x = Math.min(image.width - canvasSize, x);
+    y = Math.min(image.height - canvasSize, y);
+
+    var snap = 8; // canvasSize
+
     document.getElementById("sectionpickerindicator").style.display = "block";
-    document.getElementById("sectionpickerindicator").style.left = (x - x % canvasSize) + "px";
-    document.getElementById("sectionpickerindicator").style.top = (y - y % canvasSize) + "px";
+    document.getElementById("sectionpickerindicator").style.left = (x - x % snap) + "px";
+    document.getElementById("sectionpickerindicator").style.top = (y - y % snap) + "px";
     document.getElementById("sectionpickerindicator").style.width = canvasSize + "px";
     document.getElementById("sectionpickerindicator").style.height = canvasSize + "px";
 
@@ -75,8 +149,14 @@ function spritescontainer_mousedown(e) {
     var rect = document.getElementById("spritescontainer").getBoundingClientRect();
     var x = e.pageX - rect.x;
     var y = e.pageY - rect.y;
-    x = (x - x % canvasSize);
-    y = (y - y % canvasSize)
+
+    x = Math.min(image.width - canvasSize, x);
+    y = Math.min(image.height - canvasSize, y);
+
+    var snap = 8; // canvasSize
+
+    x = (x - x % snap);
+    y = (y - y % snap)
 
     document.getElementById("sectionpicker").style.left = x + "px";
     document.getElementById("sectionpicker").style.top = y + "px";
@@ -298,4 +378,19 @@ function drawCircle(ctx, x0, y0, radius) {
         }
     }
     ctx.fill();
+}
+
+window.save = function() {
+    var dataurl = image.toDataURL('image/png');
+    var regex = /^data:.+\/(.+);base64,(.*)$/;
+    var matches = dataurl.match(regex);
+    var ext = matches[1];
+    var data = matches[2];
+
+    var Buffer = parent.require('buffer').Buffer; 
+    var buffer = Buffer.from(data, 'base64');
+
+    fs.writeFile(window.editorFilename, buffer, function () {
+        console.log(window.editorFilename + " saved");
+    });
 }

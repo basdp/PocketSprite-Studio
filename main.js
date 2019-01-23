@@ -12,7 +12,7 @@ function createWindow () {
   modal.setup();
 
   win = new BrowserWindow({
-    width: 800, height: 600, frame: false, backgroundColor: '#fff', webPreferences: {
+    width: 1000, height: 700, frame: false, backgroundColor: '#fff', webPreferences: {
       webSecurity: false
     } })
 

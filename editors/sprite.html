@@ -4,6 +4,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <style>
+        @font-face {
+            font-family: 'Pixellari';
+            src: url('../fonts/Pixellari.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        *::-webkit-scrollbar-track
+        {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar
+        {
+            width: 10px;
+            background-color: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb
+        {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
         html,
         body {
             margin: 0;
@@ -12,12 +35,41 @@
             display: flex;
             width: 100vw;
             height: 100vh;
+            font-family: Pixellari;
+            font-size: 16px;
+            color: #C2C3C7;
         }
 
         div {
             cursor: default;
             user-select: none;
             -webkit-user-drag: none;
+        }
+
+        button {
+            border: 2px solid rgb(39, 39, 39);
+            box-shadow: inset 0px 2px 0px 0px #666;
+            background: #535353;
+            box-sizing: border-box;
+            font-family: Pixellari;
+            font-size: 16px;
+            padding-top: 5px;
+            color: #C2C3C7;
+        }
+
+        button:hover {
+            background: #5c5c5c;
+            box-shadow: inset 0px 2px 0px 0px #777;
+        }
+
+        button:active {
+            background: #444444;
+            box-shadow: inset 0px 2px 0px 0px #666;
+            outline: 0;
+        }
+
+        button:focus {
+            outline: 0;
         }
 
         .tools {
@@ -79,6 +131,8 @@
             align-items: center;   
             display: flex;  
             height: calc(100vh - 66px);
+            width: calc(100vw - 222px);
+            overflow: auto;
         }
 
         .canvas canvas {
@@ -166,24 +220,39 @@
             image-rendering: pixelated;
         }
 
+        .canvascontrols {
+            padding: 0 14px;
+            border-bottom: 2px solid #282828;
+            margin: 0 -2px;
+            padding-bottom: 5px;
+        }
+
+        .canvascontrols #canvassize {
+            display: inline-block;
+            width: 25px;
+            text-align: right;
+        }
+
+        .canvascontrols button {
+            width: 20px;
+            height: 20px;
+            padding: 2px 0;
+        }
+
+        
+
     </style>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script>
        // window.jQuery = window.$ = parent.require('jquery');
+        window.editorFilename = decodeURI(window.location.hash.substr(1));
     </script>
     <script>
         const fs = parent.require("fs");
-        const Mousetrap = parent.require('mousetrap');
     </script>
+    <script src="../node_modules/mousetrap/mousetrap.min.js"></script>
     <script src="floodFill2D.js"></script>
     <script src="sprite.js"></script>
-    <script>
-        function save() {
-            fs.writeFile(window.editorFilename, window.editor.getValue(), "utf8", function () {
-                console.log(window.editorFilename + " saved");
-            });
-        }
-    </script>
 </head>
 <body>
     <div class="tools">
@@ -201,23 +270,38 @@
         </div>
         <div class="colors">
             <div class="picker">
-                <div class="color" style="background-color: #000000;"></div>
-                <div class="color" style="background-color: #FFFFFF;"></div>
-                <div class="color selected" style="background-color: #5F574F;"></div>
-                <div class="color" style="background-color: #C2C3C7;"></div>
-                <div class="color" style="background-color: #FFF1E8;"></div>
-                <div class="color" style="background-color: #FFEC27;"></div>
-                <div class="color" style="background-color: #FFA300;"></div>
-                <div class="color" style="background-color: #FFCCAA;"></div>
-                <div class="color" style="background-color: #AB5236;"></div>
-                <div class="color" style="background-color: #FF77A8;"></div>
-                <div class="color" style="background-color: #FF004D;"></div>
-                <div class="color" style="background-color: #83769C;"></div>
-                <div class="color" style="background-color: #7E2553;"></div>
-                <div class="color" style="background-color: #29ADFF;"></div>
-                <div class="color" style="background-color: #1D2B53;"></div>
-                <div class="color" style="background-color: #008751;"></div>
-                <div class="color" style="background-color: #00E436;"></div>
+                <div class="color selected" style="background-color: #000000;"></div>
+                <div class="color" style="background-color: #0b0a0d;"></div>
+                <div class="color" style="background-color: #161524;"></div>
+                <div class="color" style="background-color: #222640;"></div>
+                <div class="color" style="background-color: #2b4057;"></div>
+                <div class="color" style="background-color: #306566;"></div>
+                <div class="color" style="background-color: #34a870;"></div>
+                <div class="color" style="background-color: #49f25a;"></div>
+                <div class="color" style="background-color: #a4ff63;"></div>
+                <div class="color" style="background-color: #fff240;"></div>
+                <div class="color" style="background-color: #f2a53f;"></div>
+                <div class="color" style="background-color: #cc7a47;"></div>
+                <div class="color" style="background-color: #f54025;"></div>
+                <div class="color" style="background-color: #a63a3a;"></div>
+                <div class="color" style="background-color: #995348;"></div>
+                <div class="color" style="background-color: #733758;"></div>
+                <div class="color" style="background-color: #4d2a49;"></div>
+                <div class="color" style="background-color: #46346a;"></div>
+                <div class="color" style="background-color: #8c2eb8;"></div>
+                <div class="color" style="background-color: #f261da;"></div>
+                <div class="color" style="background-color: #ffa8d4;"></div>
+                <div class="color" style="background-color: #b3dfff;"></div>
+                <div class="color" style="background-color: #70a5fa;"></div>
+                <div class="color" style="background-color: #407cff;"></div>
+                <div class="color" style="background-color: #1f50cc;"></div>
+                <div class="color" style="background-color: #213ea6;"></div>
+                <div class="color" style="background-color: #272f66;"></div>
+                <div class="color" style="background-color: #414558;"></div>
+                <div class="color" style="background-color: #6d7078;"></div>
+                <div class="color" style="background-color: #898b8c;"></div>
+                <div class="color" style="background-color: #bbbdbf;"></div>
+                <div class="color" style="background-color: #ffffff;"></div>
             </div>
         </div>
     </div>
@@ -226,6 +310,11 @@
             <canvas id="sprites" width="160" height="128"></canvas>
             <div class="sectionpicker" id="sectionpicker"></div>
             <div class="sectionpickerindicator" id="sectionpickerindicator"></div>
+        </div>
+
+        <div class="canvascontrols">
+            Canvas: <span id="canvassize">8</span>px&nbsp;
+            <button id="increasecanvassize">+</button> <button id="decreasecanvassize">-</button>
         </div>
     </div>
 
