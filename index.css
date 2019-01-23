@@ -1,13 +1,26 @@
+@font-face {
+    font-family: 'Pixellari';
+    src: url('fonts/Pixellari.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
     padding: 0;
     margin: 0;
-    background: #1D1F26;
-    font-family: Roboto;
+    background: #242424;
+    font-family: Pixellari;
+    font-size: 16px;
     color: #CCC;
     display: flex;
     flex-direction: column;
     height: 100vh;
     width: 100vw;
+    -webkit-subpixel-antialiasing: none;
+}
+
+a { 
+    cursor: default;
 }
 
 *::-webkit-scrollbar-track
@@ -33,7 +46,7 @@ div {
 
 .titlebar {
     height: 32px;
-    background: #151415;
+    background: #2C2C2C;
     -webkit-app-region: drag;
     position: relative;
 }
@@ -42,9 +55,14 @@ div {
     position: absolute;
     top: 0;
     left: 16px;
-    line-height: 32px;
-    font-size: 13px;
+    line-height: 34px;
+    font-size: 16px;
     width: calc(100vw - 42px * 3);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.titlebar .title .emph {
+    color: white;
 }
 
 .titlebar .windowbuttons {
@@ -79,6 +97,28 @@ div {
     background: rgba(255, 0, 0, 0.3);
 }
 
+.menubar {
+    height: 25px;
+    background: #555555;
+    position: relative;
+    padding: 0 10px;
+}
+
+.menubar a {
+    color: #BBBBBB;
+    text-decoration: none;
+    line-height: 26px;
+    height: 25px;
+    display: inline-block;
+    padding: 0 5px;
+    cursor: default;
+    -webkit-user-drag: none;
+}
+
+.menubar a:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
 .container {
     display: flex;
     flex-direction: row;
@@ -89,28 +129,33 @@ div {
     flex: 0 0 260px;
     position: relative;
     overflow: hidden;
-    background: #222730;
+    background: #393939;
+    border-right: 2px solid #282828;
 }
 
 .filelist .toolbar {
     position: absolute;
     top: 0;
-    right: 6px;
+    right: 16px;
 }
 
 .filelist .title {
     height: 32px;
     line-height: 32px;
-    font-size: 11px;
+    font-size: 16px;
     padding: 0 16px;
-
+    color: rgba(255,255,255,0.5);
+    box-sizing: border-box;
+    border-bottom: 2px solid #282828;
+    border-top: 2px solid #282828;
+    box-shadow: inset 0px 2px 0px 0px #4A4A4A;
 }
 
 .filelist ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    height: calc(100vh - 64px);
+    height: calc(100vh - 89px);
     overflow-x: hidden;
     overflow-y: scroll;
 }
@@ -119,7 +164,7 @@ div {
     list-style: none;
     padding: 0;
     margin: 0;
-    font-size: 12px;
+    font-size: 16px;
     line-height: 24px;
     padding: 0 6px;
 }
@@ -127,7 +172,6 @@ div {
 .filelist ul li i {
     font-size: 16px;
     position: relative;
-    top: -1px;
     vertical-align: middle;
     margin-right: 6px;
 }
@@ -142,10 +186,14 @@ div {
 }
 
 .toolbar {
-    padding-left: 6px;
+    padding: 0 6px;
     height: 32px;
     display: flex;
-    background: #222730;
+    background: #393939;
+    border-bottom: 2px solid #282828;
+    box-sizing: border-box;
+    border-top: 2px solid #282828;
+    box-shadow: inset 0px 2px 0px 0px #4A4A4A;
 }
 
 .toolbar.right {
@@ -157,8 +205,8 @@ div {
 .toolbar .button {
     display: inline-block;
     margin-right: 4px;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     display: flex;
     flex: 0 0 32px;
     justify-content: center;
@@ -180,6 +228,13 @@ div {
 
 .toolbar .button i {
     font-size: 22px;
+}
+
+.toolbar .button img {
+    width: 16px;
+    height: 16px;
+    image-rendering: pixelated;
+    opacity: 0.8;
 }
 
 .toolbar .separator {

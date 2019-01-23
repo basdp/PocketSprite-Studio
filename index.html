@@ -11,13 +11,15 @@
     <script>
         global.jQuery = global.$ = require('jquery');
     </script>
+    <link type="text/css" rel="stylesheet" href="dropdown-plugin/jquery.dropdown.css" />
+    <script type="text/javascript" src="dropdown-plugin/jquery.dropdown.js"></script>
 
     <script src="index.js"></script>
 </head>
 
 <body>
     <div class="titlebar">
-        <div class="title"><b>PocketSprite</b> Studio</div>
+        <div class="title"><span class="emph">PocketSprite</span> Studio</div>
         <div class="windowbuttons">
             <div class="button close-button">
                 <i class="material-icons md-18">close</i>
@@ -30,13 +32,19 @@
             </div>
         </div>
     </div>
+
+    <div class="menubar">
+        <a href="#" data-jq-dropdown="#jq-dropdown-1">File</a>
+        <a href="#" data-jq-dropdown="#jq-dropdown-1">Edit</a>
+    </div>
+
     <div class="container">
         <div class="filelist">
-            <div class="title">PROJECT</div>
+            <div class="title">Project</div>
             <div class="toolbar">
-                <div class="button new-file" title="New file..."><i class="material-icons">add</i></div>
-                <div class="button open-project" title="Open project..."><i class="material-icons">folder_open</i></div>
-                <div class="button new-project" title="New project..."><i class="material-icons">create_new_folder</i></div>
+                <div class="button new-file" title="New file..."><img src="icons/plus.png" /></div>
+                <div class="button open-project" title="Open project..."><img src="icons/projectopen.png" /></div>
+                <div class="button new-project" title="New project..."><img src="icons/projectnew.png" /></div>
             </div>
             <ul id="files">
                 
@@ -44,20 +52,32 @@
         </div>
         <div class="editor">
             <div class="toolbar">
-                <div class="button save" title="Save file"><i class="material-icons">save</i></div>
+                <div class="button save" title="Save file"><img src="icons/save.png" /></div>
                 <div class="separator"></div>
-                <div class="button run" title="Run in emulator"><i class="material-icons">play_arrow</i></div>
-                <div class="button export" title="Export to PocketSprite"><i class="material-icons">videogame_asset</i></div>
+                <div class="button run" title="Run in emulator"><img src="icons/play.png" /></div>
+                <div class="button export" title="Export to PocketSprite"><img src="icons/export.png" /></div>
             </div>
             <div class="toolbar right">
-                <div class="button store" title="Open starting page"><i class="material-icons">store</i></div>
-                <div class="button settings" title="Settings..."><i class="material-icons">build</i></div>
+                <div class="button store" title="Open starting page"><img src="icons/home.png" /></div>
+                <div class="button settings" title="Settings..."><img src="icons/settings.png" /></div>
             </div>
             <!-- <iframe src="editors/code.html"></iframe> -->
         </div>
 
     </div>
 
+
+<div id="jq-dropdown-1" class="jq-dropdown">
+    <ul class="jq-dropdown-menu">
+        <li><a href="#1">Item 1</a></li>
+        <li><a href="#2">Item 2</a></li>
+        <li><a href="#3">Item 3</a></li>
+        <li class="jq-dropdown-divider"></li>
+        <li><a href="#4">Item 4</a></li>
+        <li><a href="#5">Item 5</a></li>
+        <li><a href="#5">Item 6</a></li>
+    </ul>
+</div>
 
 </body>
 
